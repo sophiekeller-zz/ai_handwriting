@@ -8,3 +8,4 @@ notes/
 *.pyc
 .idea/
 dump/
+*node_modules/*
