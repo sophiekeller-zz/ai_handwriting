@@ -7,16 +7,32 @@ function Uploader() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState("");
+  const [fileUrl, setFileUrl] = useState("");
 
-  const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+  // const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
   const handleSubmit = async () => {
     console.log("submitting");
     setLoading(true);
-    await delay(2000);
-    setTimeout("", 3000);
-    setResult("TODO");
-    setLoading(false);
+    process_photo();
+  };
+
+  const process_photo = () => {
+    let imageData = new FormData();
+    imageData.append("image", file);
+    fetch("/process_photo", {
+      method: "POST",
+      body: imageData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data["error"]) {
+          console.log(data["error"]);
+        } else {
+          setResult(data["result"]);
+          setLoading(false);
+        }
+      });
   };
 
   return (
@@ -43,7 +59,8 @@ function Uploader() {
           <Form.Group controlId="formFile" className="mb-3">
             <Form.Control
               onChange={(e) => {
-                setFile(URL.createObjectURL(e.target.files[0]));
+                setFileUrl(URL.createObjectURL(e.target.files[0]));
+                setFile(e.target.files[0]);
               }}
               type="file"
               name="logo"
@@ -65,7 +82,7 @@ function Uploader() {
         <Col md="2">{loading && <Spinner animation="border" />}</Col>
       </Row>
       {error !== "" && <Alert variant={"danger"}>{error}</Alert>}
-      <Image src={file} rounded style={{ width: "200px" }} />
+      <Image src={fileUrl} rounded style={{ width: "200px" }} />
       {result && (
         <h4
           style={{
