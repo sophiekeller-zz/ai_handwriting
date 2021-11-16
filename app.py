@@ -4,6 +4,11 @@ from flask import Flask, request
 import requests
 import io
 from PIL import Image
+try:
+    import main
+except Exception as e:
+    print(e)
+
 
 load_dotenv()
 
@@ -26,12 +31,13 @@ def process_photo():
     if imgfile.filename == '':
         return {'Error': 'No Filename Specified'}
 
-    img = Image.open(imgfile)
-    img.show() #comment me out to not open photo automatically
+    #img = Image.open(imgfile)
+    #img.show() #comment me out to not open photo automatically
 
     #TODO: get word prediction from image file
-
-    return {'result': 'WORD_HERE'} #TODO: add result here in place of 'WORD_HERE'
+    word = main(imgfile.filename)#src.main.main(imgfile.name) # download file and then send to function
+    print(word)
+    return {'result': word} #TODO: add result here in place of 'WORD_HERE'
 
 if __name__ == '__main__':
     app.run()
