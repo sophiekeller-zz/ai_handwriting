@@ -1,8 +1,6 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, request, url_for
-import requests
-import io
+from flask import Flask, request
 from PIL import Image
 from main import main
 from werkzeug.utils import secure_filename
