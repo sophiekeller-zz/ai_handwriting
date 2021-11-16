@@ -1,13 +1,11 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, request
+from flask import Flask, request, url_for
 import requests
 import io
 from PIL import Image
-try:
-    import main
-except Exception as e:
-    print(e)
+from main import main
+from werkzeug.utils import secure_filename
 
 
 load_dotenv()
@@ -35,8 +33,14 @@ def process_photo():
     #img.show() #comment me out to not open photo automatically
 
     #TODO: get word prediction from image file
-    word = main(imgfile.filename)#src.main.main(imgfile.name) # download file and then send to function
+
+    filename = secure_filename(imgfile.filename)
+    path = os.path.join('./images', filename)
+    imgfile.save(path)
+
+    word, probability = main(path)#src.main.main(imgfile.name) # download file and then send to function
     print(word)
+    # return {'word': word, 'probability': probability}
     return {'result': word} #TODO: add result here in place of 'WORD_HERE'
 
 if __name__ == '__main__':

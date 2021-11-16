@@ -1,0 +1,1 @@
+file:///Users/soche/Desktop/ai_handwriting/SimpleHTR/data/corpus.txt
