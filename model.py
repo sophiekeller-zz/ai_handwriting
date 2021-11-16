@@ -91,6 +91,7 @@ class Model:
 
         # bidirectional RNN
         # BxTxF -> BxTx2H
+        tf.compat.v1.reset_default_graph()
         (fw, bw), _ = tf.compat.v1.nn.bidirectional_dynamic_rnn(cell_fw=stacked, cell_bw=stacked, inputs=rnn_in3d,
                                                                 dtype=rnn_in3d.dtype)
 
