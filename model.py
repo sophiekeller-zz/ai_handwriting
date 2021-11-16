@@ -27,6 +27,7 @@ class Model:
                  must_restore: bool = False,
                  dump: bool = False) -> None:
         """Init model: add CNN, RNN and CTC and initialize TF."""
+        tf.compat.v1.reset_default_graph()
         self.dump = dump
         self.char_list = char_list
         self.decoder_type = decoder_type
@@ -91,7 +92,6 @@ class Model:
 
         # bidirectional RNN
         # BxTxF -> BxTx2H
-        tf.compat.v1.reset_default_graph()
         (fw, bw), _ = tf.compat.v1.nn.bidirectional_dynamic_rnn(cell_fw=stacked, cell_bw=stacked, inputs=rnn_in3d,
                                                                 dtype=rnn_in3d.dtype)
 
