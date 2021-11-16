@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from flask import Flask, request
 from PIL import Image
-from main import main
+from main import get_prediction
 from werkzeug.utils import secure_filename
 
 
@@ -36,10 +36,8 @@ def process_photo():
     path = os.path.join('./images', filename)
     imgfile.save(path)
 
-    word, probability = main(path)#src.main.main(imgfile.name) # download file and then send to function
-    print(word)
-    # return {'word': word, 'probability': probability}
-    return {'result': word} #TODO: add result here in place of 'WORD_HERE'
+    word, probability = get_prediction(path)#src.main.main(imgfile.name) # download file and then send to function
+    return {'word_prediction': word[0], 'probability': str(probability[0])} #TODO: add result here in place of 'WORD_HERE'
 
 if __name__ == '__main__':
     app.run()

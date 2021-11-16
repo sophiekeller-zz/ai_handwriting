@@ -6,7 +6,7 @@ function Uploader() {
   const [error, setError] = useState("");
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState("");
+  const [result, setResult] = useState(null);
   const [fileUrl, setFileUrl] = useState("");
 
   // const delay = (ms) => new Promise((res) => setTimeout(res, ms));
@@ -29,7 +29,7 @@ function Uploader() {
         if (data["error"]) {
           console.log(data["error"]);
         } else {
-          setResult(data["result"]);
+          setResult(data);
           setLoading(false);
         }
       });
@@ -84,13 +84,22 @@ function Uploader() {
       {error !== "" && <Alert variant={"danger"}>{error}</Alert>}
       <Image src={fileUrl} rounded style={{ width: "200px" }} />
       {result && (
-        <h4
-          style={{
-            color: "#a561ff",
-          }}
-        >
-          Result: {result}
-        </h4>
+        <div>
+          <h4
+            style={{
+              color: "#a561ff",
+            }}
+          >
+            Result: {result.word_prediction}
+          </h4>
+          <h4
+            style={{
+              color: "#a561ff",
+            }}
+          >
+            Probability of Correctness: {result.probability}
+          </h4>
+        </div>
       )}
     </div>
   );
