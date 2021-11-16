@@ -24,5 +24,5 @@ lmdb==1.2.1
 matplotlib==3.1.1
 numpy>=1.18.1
 opencv-python==4.5.4.58
-path==12.0.1
+path==15.0.0
 tensorflow==2.7.0
