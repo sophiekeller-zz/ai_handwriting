@@ -4,6 +4,7 @@ from flask import Flask, request
 from PIL import Image
 from main import get_prediction
 from werkzeug.utils import secure_filename
+import json
 
 
 load_dotenv()
@@ -19,6 +20,25 @@ def index():
 @app.errorhandler(404)
 def not_found(e):
     return app.send_static_file('index.html')
+
+@app.route('/get_statistics')
+def get_statistics():
+    f = open('record.json',)
+    return json.load(f)
+
+@app.route('/update_statistics', methods=['POST'])
+def update_statistics():
+    new_value = request.json['newValue']
+    f = open('record.json',)
+    data = json.load(f)
+    data['total_data'] = data['total_data'] + 1
+    data['probabilities_sum'] = data['probabilities_sum'] + float(new_value)
+
+    with open("record.json", "w") as outfile:
+        json.dump(data, outfile)
+    
+    return {'success': True}
+
 
 @app.route('/process_photo', methods=['POST'])
 def process_photo():

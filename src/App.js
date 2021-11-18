@@ -10,9 +10,15 @@ function App() {
   const [results, setResults] = useState(null);
 
   return (
-    <div className="main-container">
+    <div
+      style={{
+        backgroundImage: "linear-gradient(#a561ff, #6d02fa)",
+        color: "white",
+        minHeight: "100vh",
+      }}
+    >
       <Router>
-        <NavBar />
+        {/* <NavBar /> */}
         <Routes>
           <Route
             exact
