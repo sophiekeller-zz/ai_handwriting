@@ -56,7 +56,7 @@ def process_photo():
     path = os.path.join('./images', filename)
     imgfile.save(path)
 
-    word, probability = get_prediction(path)#src.main.main(imgfile.name) # download file and then send to function
+    word, probability = get_prediction(path)#SEND SECOND PARAMETER AS DECODER NUMBER FROM FRONTEND # download file and then send to function
     return {'word_prediction': word[0], 'probability': str(probability[0])} #TODO: add result here in place of 'WORD_HERE'
 
 if __name__ == '__main__':

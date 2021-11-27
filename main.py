@@ -139,11 +139,12 @@ def predict(path):
     model = Model(list(open(FilePaths.fn_char_list).read()), DecoderType.BestPath, must_restore=True, dump=args.dump)
     return infer(model, path)
 
-def get_prediction(file_path='./data/word.png'):
+def get_prediction(file_path='./data/word.png', decoder = 0):
     """Main function."""
 
     # set chosen CTC decoder
-    decoder_type = DecoderType.BestPath#decoder_mapping[args.decoder]
+    decoders = {0: DecoderType.BestPath, 1: DecoderType.BeamSearch}
+    decoder_type = decoders[decoder]#DecoderType.BestPath
 
     # # infer text on test image
     model = Model(list(open(FilePaths.fn_char_list).read()), decoder_type, must_restore=True)
@@ -151,4 +152,4 @@ def get_prediction(file_path='./data/word.png'):
 
 
 if __name__ == '__main__':
-    get_prediction()
+    print(get_prediction('./SimpleHTR/data/word.png', 1))
