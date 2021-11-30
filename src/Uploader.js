@@ -12,6 +12,7 @@ function Uploader() {
   const [numberRight, setNumberRight] = useState("");
   const [feedback, setFeedback] = useState("");
   const [statistics, setStatistics] = useState(null);
+  const [method, setMethod] = useState(0);
 
   useEffect(() => {
     fetch("/get_statistics")
@@ -25,15 +26,26 @@ function Uploader() {
       });
   }, []);
 
-  const handleSubmit = async () => {
-    console.log("submitting");
-    setLoading(true);
+  const handleSubmit = () => {
     process_photo();
   };
 
   const process_photo = () => {
+    if (!file) {
+      setError("Please upload a file to decode.");
+      return;
+    }
+    if (result) {
+      setError("Please refresh the page to try another word.");
+      return;
+    }
+    setLoading(true);
     let imageData = new FormData();
+    console.log(file);
+    console.log(method);
     imageData.append("image", file);
+    imageData.append("method", method);
+
     fetch("/process_photo", {
       method: "POST",
       body: imageData,
@@ -51,7 +63,9 @@ function Uploader() {
 
   const submitCount = () => {
     if (isNaN(numberRight) || numberRight === "") {
-      setFeedback("please enter a number");
+      setFeedback("Please enter a number.");
+    } else if (!file) {
+      setFeedback("No word has been decoded!");
     } else {
       let count = result.word_prediction.length;
       let proportionRight = numberRight / count;
@@ -70,7 +84,7 @@ function Uploader() {
       })
         .then((response) => response.json())
         .then((data) => {
-          setFeedback("thanks for your feedback");
+          setFeedback("Thanks for your feedback!");
         });
     }
   };
@@ -106,8 +120,8 @@ function Uploader() {
         Try it out!
       </h5>
       <Row style={{ marginTop: "10px" }}>
-        <Col md="8">
-          <Form.Group controlId="formFile" className="mb-3">
+        <Col md="4">
+          <Form.Group controlId="formFile">
             <Form.Control
               onChange={(e) => {
                 setFileUrl(URL.createObjectURL(e.target.files[0]));
@@ -117,6 +131,17 @@ function Uploader() {
               name="logo"
             />
           </Form.Group>
+        </Col>
+        <Col md="4">
+          <Form.Select
+            onChange={(e) => {
+              setMethod(e.target.value);
+            }}
+            value={method}
+          >
+            <option value="0">Best Path</option>
+            <option value="1">Beam Search</option>
+          </Form.Select>
         </Col>
         <Col md="3">
           <Button
@@ -129,10 +154,9 @@ function Uploader() {
             Go
           </Button>
         </Col>
-
         <Col md="1">{loading && <Spinner animation="border" />}</Col>
       </Row>
-      {error !== "" && <Alert variant={"danger"}>{error}</Alert>}
+      {error && <div style={{ marginTop: "10px" }}>{error}</div>}
       <Image src={fileUrl} rounded style={{ width: "200px" }} />
       {result && (
         <div>
@@ -183,7 +207,15 @@ function Uploader() {
             Submit
           </Button>
         </Col>
-        {feedback && <div>{feedback}</div>}
+        <div
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            display: "flex",
+          }}
+        >
+          {feedback && <div>{feedback}</div>}
+        </div>
       </Row>
     </div>
   );

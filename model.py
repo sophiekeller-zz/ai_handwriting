@@ -163,10 +163,10 @@ class Model:
 
         # load saved model if available
         if latest_snapshot:
-            print('Init with stored values from ' + latest_snapshot)
+            # print('Init with stored values from ' + latest_snapshot)
             saver.restore(sess, latest_snapshot)
         else:
-            print('Init with new values')
+            # print('Init with new values')
             sess.run(tf.compat.v1.global_variables_initializer())
 
         return sess, saver
@@ -243,7 +243,7 @@ class Model:
                     csv += str(rnn_output[t, b, c]) + ';'
                 csv += '\n'
             fn = dump_dir + 'rnnOutput_' + str(b) + '.csv'
-            print('Write dump of NN to file: ' + fn)
+            # print('Write dump of NN to file: ' + fn)
             with open(fn, 'w') as f:
                 f.write(csv)
 
